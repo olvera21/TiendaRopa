@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Minus, Trash2, UserPlus, ShoppingBag, X, Tag } from 'lucide-react';
-import api from '../api/client';
+import api, { UPLOADS_BASE } from '../api/client';
 import { money, Spinner, EmptyState, Modal } from '../components/ui.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 
@@ -37,8 +37,8 @@ export default function POS() {
     api.get('/ventas/promociones-activas').then((r) => setPromociones(r.data)).catch(() => setPromociones([]));
   }, []);
 
-  // Encuentra la promoción activa más específica que aplica a un ítem del carrito:
-  // talla exacta > producto > categoría > departamento > general (sin filtros)
+  // Encuentra la promociÃ³n activa mÃ¡s especÃ­fica que aplica a un Ã­tem del carrito:
+  // talla exacta > producto > categorÃ­a > departamento > general (sin filtros)
   function promoParaItem(item) {
     let mejor = null;
     let mejorPrioridad = -1;
@@ -167,7 +167,7 @@ export default function POS() {
 
   async function procesarVenta() {
     if (cart.length === 0) return toast.error('Agrega al menos un producto.');
-    if (tipoVenta !== 'contado' && !cliente) return toast.error('Selecciona un cliente para crédito o pago a meses.');
+    if (tipoVenta !== 'contado' && !cliente) return toast.error('Selecciona un cliente para crÃ©dito o pago a meses.');
 
     setProcesando(true);
     try {
@@ -191,14 +191,14 @@ export default function POS() {
 
   return (
     <div className="grid lg:grid-cols-[1fr_380px] gap-6 h-full">
-      {/* Catálogo */}
+      {/* CatÃ¡logo */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-900/30" />
             <input
               className="input pl-9"
-              placeholder="Buscar por nombre, SKU o código de barras…"
+              placeholder="Buscar por nombre, SKU o cÃ³digo de barrasâ€¦"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
             />
@@ -231,7 +231,7 @@ export default function POS() {
               <div key={prod.id} className="card p-3 flex flex-col gap-2">
                 <div className="aspect-square rounded-lg bg-parchment-200 overflow-hidden flex items-center justify-center">
                   {prod.imagen ? (
-                    <img src={`/uploads/${prod.imagen}`} alt={prod.nombre} className="w-full h-full object-cover" />
+                    <img src={`${UPLOADS_BASE}/uploads/${prod.imagen}`} alt={prod.nombre} className="w-full h-full object-cover" />
                   ) : (
                     <ShoppingBag className="text-ink-900/20" size={28} />
                   )}
@@ -293,7 +293,7 @@ export default function POS() {
 
         <div className="flex-1 overflow-y-auto space-y-2 min-h-[120px]">
           {cart.length === 0 ? (
-            <EmptyState label="Aún no hay productos" />
+            <EmptyState label="AÃºn no hay productos" />
           ) : (
             cart.map((item) => {
               const { promo, descuento } = descuentoDeItem(item);
@@ -301,7 +301,7 @@ export default function POS() {
                 <div key={item.key} className="flex items-center gap-2 border-b border-ink-900/5 pb-2">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{item.nombre}</p>
-                    <p className="text-xs text-ink-900/50">{item.talla ? `Talla ${item.talla} · ` : ''}{money(item.precio)}</p>
+                    <p className="text-xs text-ink-900/50">{item.talla ? `Talla ${item.talla} Â· ` : ''}{money(item.precio)}</p>
                     {promo && (
                       <p className="text-xs text-moss-600 flex items-center gap-1 mt-0.5">
                         <Tag size={11} /> {promo.nombre} (-{money(descuento)})
@@ -324,7 +324,7 @@ export default function POS() {
           <div className="grid grid-cols-2 gap-2">
             <select value={tipoVenta} onChange={(e) => setTipoVenta(e.target.value)} className="input text-sm">
               <option value="contado">Contado</option>
-              <option value="credito">Crédito</option>
+              <option value="credito">CrÃ©dito</option>
               <option value="a_meses">A meses</option>
             </select>
             <select value={formaPago} onChange={(e) => setFormaPago(e.target.value)} className="input text-sm">
@@ -397,13 +397,13 @@ export default function POS() {
                 onChange={(e) => setNuevoClienteForm((f) => ({ ...f, nombre: e.target.value }))} />
             </div>
             <div>
-              <label className="label">Teléfono (opcional)</label>
-              <input placeholder="10 dígitos" className="input" value={nuevoClienteForm.telefono}
+              <label className="label">TelÃ©fono (opcional)</label>
+              <input placeholder="10 dÃ­gitos" className="input" value={nuevoClienteForm.telefono}
                 onChange={(e) => setNuevoClienteForm((f) => ({ ...f, telefono: e.target.value }))} />
             </div>
             {tipoVenta !== 'contado' && (
               <div>
-                <label className="label">Límite de crédito</label>
+                <label className="label">LÃ­mite de crÃ©dito</label>
                 <input type="number" min="0" placeholder="0" className="input" value={nuevoClienteForm.limite_credito}
                   onChange={(e) => setNuevoClienteForm((f) => ({ ...f, limite_credito: e.target.value }))} />
               </div>
@@ -417,7 +417,7 @@ export default function POS() {
           <div className="space-y-3">
             <input
               autoFocus
-              placeholder="Buscar por nombre o teléfono…"
+              placeholder="Buscar por nombre o telÃ©fonoâ€¦"
               className="input"
               value={busquedaCliente}
               onChange={(e) => buscarCliente(e.target.value)}
@@ -429,7 +429,7 @@ export default function POS() {
                   onClick={() => { setCliente(c); setShowClienteModal(false); }}
                   className="w-full text-left px-3 py-2 rounded-lg hover:bg-parchment-200 text-sm"
                 >
-                  {c.nombre} {c.apellido || ''} · {c.telefono || 'sin teléfono'}
+                  {c.nombre} {c.apellido || ''} Â· {c.telefono || 'sin telÃ©fono'}
                 </button>
               ))}
             </div>

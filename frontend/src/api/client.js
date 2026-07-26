@@ -1,6 +1,9 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
-const api = axios.create({ baseURL: '/api' });
+const API_ORIGIN = import.meta.env.VITE_API_URL || '';
+export const UPLOADS_BASE = API_ORIGIN;
+
+const api = axios.create({ baseURL: `${API_ORIGIN}/api` });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('pf_token');

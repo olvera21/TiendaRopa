@@ -1,15 +1,16 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
+const corsOrigins = (process.env.CORS_ORIGIN || '*').split(',').map((o) => o.trim());
+app.use(cors({ origin: corsOrigins.includes('*') ? '*' : corsOrigins, credentials: true }));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Imágenes de productos servidas estáticamente
+// ImÃ¡genes de productos servidas estÃ¡ticamente
 app.use('/uploads', express.static(path.join(__dirname, '..', process.env.UPLOAD_DIR || 'uploads')));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'punto-family-backend' }));
@@ -42,5 +43,5 @@ app.use((_req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`🚀 Punto Family API corriendo en http://localhost:${PORT}`);
+  console.log(`ðŸš€ Punto Family API corriendo en http://localhost:${PORT}`);
 });
