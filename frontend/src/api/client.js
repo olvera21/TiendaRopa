@@ -3,6 +3,12 @@
 const API_ORIGIN = import.meta.env.VITE_API_URL || '';
 export const UPLOADS_BASE = API_ORIGIN;
 
+export function resolveImagenUrl(imagen) {
+  if (!imagen) return null;
+  if (/^https?:\/\//i.test(imagen)) return imagen;
+  return `${API_ORIGIN}/uploads/${imagen}`;
+}
+
 const api = axios.create({ baseURL: `${API_ORIGIN}/api` });
 
 api.interceptors.request.use((config) => {

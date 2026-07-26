@@ -1,6 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Plus, Search, Pencil, Trash2, ShoppingBag, X, Percent, PackageMinus, SlidersHorizontal } from 'lucide-react';
-import api, { UPLOADS_BASE } from '../api/client';
+import api, { resolveImagenUrl } from '../api/client';
 import { money, Spinner, EmptyState, Modal, Badge } from '../components/ui.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 
@@ -235,7 +235,7 @@ export default function Inventario() {
                 <tr key={p.id} className="border-t border-ink-900/5">
                   <td className="px-4 py-3 flex items-center gap-2">
                     <div className="w-9 h-9 rounded-lg bg-parchment-200 flex items-center justify-center overflow-hidden shrink-0">
-                      {p.imagen ? <img src={`${UPLOADS_BASE}/uploads/${p.imagen}`} className="w-full h-full object-cover" /> : <ShoppingBag size={16} className="text-ink-900/20" />}
+                      {p.imagen ? <img src={resolveImagenUrl(p.imagen)} className="w-full h-full object-cover" /> : <ShoppingBag size={16} className="text-ink-900/20" />}
                     </div>
                     <span className="font-medium">{p.nombre}</span>
                   </td>

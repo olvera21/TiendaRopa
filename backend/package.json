@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "punto-family-backend",
   "version": "1.0.0",
   "description": "API REST de Punto Family (Node.js + Express + SQL Server)",
@@ -11,6 +11,7 @@
     "migrate:import": "node migration/import-to-sqlserver.js"
   },
   "dependencies": {
+    "cloudinary": "^2.5.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

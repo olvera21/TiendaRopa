@@ -1,4 +1,5 @@
-const { sql, getPool } = require('../config/db');
+﻿const { sql, getPool } = require('../config/db');
+const { subirImagen, cloudinaryConfigured } = require('../config/cloudinary');
 
 const DEPARTAMENTOS = ['ropa'];
 
@@ -93,7 +94,16 @@ async function save(req, res) {
     iva_porcentaje: parseFloat(body.iva_porcentaje) || 0,
     merma_porcentaje: parseFloat(body.merma_porcentaje) || 0,
   };
-  if (req.file) data.imagen = req.file.filename;
+  if (req.file) {
+    if (!cloudinaryConfigured) {
+      return res.status(500).json({ error: 'El almacenamiento de imágenes (Cloudinary) no está configurado en el servidor.' });
+    }
+    try {
+      data.imagen = await subirImagen(req.file.buffer);
+    } catch (e) {
+      return res.status(500).json({ error: 'No se pudo subir la imagen: ' + e.message });
+    }
+  }
 
   const pool = await getPool();
 
@@ -150,7 +160,7 @@ async function save(req, res) {
     res.json({ ok: true, msg: 'Producto registrado correctamente.', id: newId, sku: data.sku });
   } catch (err) {
     if (String(err.message).includes('codigo_barras')) {
-      return res.status(409).json({ error: 'El código de barras ingresado ya existe en otro producto.' });
+      return res.status(409).json({ error: 'El cÃ³digo de barras ingresado ya existe en otro producto.' });
     }
     res.status(500).json({ error: `Error: ${err.message}` });
   }

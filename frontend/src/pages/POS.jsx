@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Minus, Trash2, UserPlus, ShoppingBag, X, Tag } from 'lucide-react';
-import api, { UPLOADS_BASE } from '../api/client';
+import api, { resolveImagenUrl } from '../api/client';
 import { money, Spinner, EmptyState, Modal } from '../components/ui.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 
@@ -231,7 +231,7 @@ export default function POS() {
               <div key={prod.id} className="card p-3 flex flex-col gap-2">
                 <div className="aspect-square rounded-lg bg-parchment-200 overflow-hidden flex items-center justify-center">
                   {prod.imagen ? (
-                    <img src={`${UPLOADS_BASE}/uploads/${prod.imagen}`} alt={prod.nombre} className="w-full h-full object-cover" />
+                    <img src={resolveImagenUrl(prod.imagen)} alt={prod.nombre} className="w-full h-full object-cover" />
                   ) : (
                     <ShoppingBag className="text-ink-900/20" size={28} />
                   )}
