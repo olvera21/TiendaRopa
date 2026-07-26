@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from 'react';
+?import { useEffect, useMemo, useState } from 'react';
 import { Plus, Search, Pencil, Trash2, ShoppingBag, X, Percent, PackageMinus, SlidersHorizontal } from 'lucide-react';
 import api, { resolveImagenUrl } from '../api/client';
 import { money, Spinner, EmptyState, Modal, Badge } from '../components/ui.jsx';
@@ -141,7 +141,7 @@ export default function Inventario() {
   }
 
   async function remove(id) {
-    if (!confirm('Â¿Desactivar este producto?')) return;
+    if (!confirm('¿Desactivar este producto?')) return;
     await api.delete(`/productos/${id}`);
     toast.success('Producto desactivado.');
     load();
@@ -185,7 +185,7 @@ export default function Inventario() {
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 max-w-xs">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-900/30" />
-          <input className="input pl-9" placeholder="Buscar productoâ€¦" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input className="input pl-9" placeholder="Buscar producto…" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
       </div>
 
@@ -196,11 +196,11 @@ export default function Inventario() {
         <select className="input w-44" value={filtroStock} onChange={(e) => setFiltroStock(e.target.value)}>
           <option value="">Todo el stock</option>
           <option value="sin_stock">Sin stock</option>
-          <option value="bajo">Stock bajo (â‰¤3)</option>
+          <option value="bajo">Stock bajo (≤3)</option>
           <option value="disponible">Disponible (&gt;3)</option>
         </select>
         <select className="input w-48" value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)}>
-          <option value="">Todas las categorÃ­as</option>
+          <option value="">Todas las categorías</option>
           {categorias.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
         </select>
         <select className="input w-52" value={orden} onChange={(e) => setOrden(e.target.value)}>
@@ -223,7 +223,7 @@ export default function Inventario() {
               <tr>
                 <th className="text-left px-4 py-3">Producto</th>
                 <th className="text-left px-4 py-3">SKU</th>
-                <th className="text-left px-4 py-3">CategorÃ­a</th>
+                <th className="text-left px-4 py-3">Categoría</th>
                 <th className="text-right px-4 py-3">Costo</th>
                 <th className="text-right px-4 py-3">Precio</th>
                 <th className="text-center px-4 py-3">Stock</th>
@@ -240,7 +240,7 @@ export default function Inventario() {
                     <span className="font-medium">{p.nombre}</span>
                   </td>
                   <td className="px-4 py-3 text-ink-900/50">{p.sku}</td>
-                  <td className="px-4 py-3 text-ink-900/50">{p.cat_nombre || 'â€”'}</td>
+                  <td className="px-4 py-3 text-ink-900/50">{p.cat_nombre || '—'}</td>
                   <td className="px-4 py-3 text-right">
                     {money(p.costo_unitario)}
                     {p.merma_porcentaje > 0 && (
@@ -277,9 +277,9 @@ export default function Inventario() {
               <input required className="input" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} />
             </div>
             <div className="col-span-2">
-              <label className="label">CategorÃ­a</label>
+              <label className="label">Categoría</label>
               <select className="input" value={form.categoria_id} onChange={(e) => setForm({ ...form, categoria_id: e.target.value })}>
-                <option value="">Sin categorÃ­a</option>
+                <option value="">Sin categoría</option>
                 {categorias.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
               </select>
             </div>
@@ -305,7 +305,7 @@ export default function Inventario() {
               <input required type="number" step="0.01" className="input" value={form.costo_unitario} onChange={(e) => setForm({ ...form, costo_unitario: e.target.value })} />
             </div>
             <div>
-              <label className="label">Precio pÃºblico (MXN)</label>
+              <label className="label">Precio público (MXN)</label>
               <input required type="number" step="0.01" className="input" value={form.precio_publico} onChange={(e) => setForm({ ...form, precio_publico: e.target.value })} />
             </div>
 
@@ -330,7 +330,7 @@ export default function Inventario() {
                     <div />
                   </div>
                   <p className="text-xs text-ink-900/50">
-                    Precio pÃºblico con IVA incluido:{' '}
+                    Precio público con IVA incluido:{' '}
                     <strong className="text-ink-900">
                       {money((parseFloat(form.precio_publico) || 0) * (1 + (parseFloat(form.iva_porcentaje) || 0) / 100))}
                     </strong>
@@ -342,7 +342,7 @@ export default function Inventario() {
             {/* Merma */}
             <div className="col-span-2 rounded-lg border border-ink-900/10 p-3 bg-parchment-200/40 space-y-2">
               <div className="flex items-center gap-1.5 text-xs font-semibold text-ink-900/50 uppercase">
-                <PackageMinus size={13} /> Merma esperada (mercancÃ­a daÃ±ada o extraviada)
+                <PackageMinus size={13} /> Merma esperada (mercancía dañada o extraviada)
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <input
@@ -364,7 +364,7 @@ export default function Inventario() {
             </div>
 
             <div className="col-span-2">
-              <label className="label">CÃ³digo de barras</label>
+              <label className="label">Código de barras</label>
               <input className="input" value={form.codigo_barras} onChange={(e) => setForm({ ...form, codigo_barras: e.target.value })} />
             </div>
             <div className="col-span-2">
@@ -372,7 +372,7 @@ export default function Inventario() {
               <input type="file" accept="image/*" className="input" onChange={(e) => setImagen(e.target.files[0])} />
             </div>
             <div className="col-span-2">
-              <label className="label">DescripciÃ³n</label>
+              <label className="label">Descripción</label>
               <textarea className="input" rows={2} value={form.descripcion} onChange={(e) => setForm({ ...form, descripcion: e.target.value })} />
             </div>
           </div>
@@ -403,7 +403,7 @@ export default function Inventario() {
               {cargandoTallas ? (
                 <div className="flex justify-center py-4"><Spinner size={20} /></div>
               ) : tallasExistentes.length === 0 ? (
-                <p className="text-sm text-ink-900/40">Este producto aÃºn no tiene tallas registradas.</p>
+                <p className="text-sm text-ink-900/40">Este producto aún no tiene tallas registradas.</p>
               ) : (
                 <div className="space-y-2">
                   {tallasExistentes.map((t) => (
@@ -421,7 +421,7 @@ export default function Inventario() {
 
               <div className="flex gap-2 border-t border-ink-900/10 pt-3">
                 <input
-                  placeholder="Nueva talla (ej. 26, M, Ãšnico)" className="input"
+                  placeholder="Nueva talla (ej. 26, M, Único)" className="input"
                   value={nuevaTalla.talla} onChange={(e) => setNuevaTalla((n) => ({ ...n, talla: e.target.value }))}
                 />
                 <input
